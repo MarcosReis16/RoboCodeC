@@ -3,6 +3,9 @@
 
 int main()
 {
+    int arena[30][30];
+
+
 
     return 0;
 }
