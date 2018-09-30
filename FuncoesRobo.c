@@ -9,12 +9,17 @@ Robo* cria_robo(){
 
     return r;//cria alocando dinamicamente memoria pro robô
 }
+void construct(Robo *robo){//constructor
+    robo->x=0;
+    robo->y=0;
+    robo->ptr = mapa;//metodo da classe robô
+}
 void mapa(Robo *robo){
     int i,j;
 
     for(i=0;i<10;i++){
         for(j=0;j<20;j++){
-            if(j>=robo->x && j<=robo->x && i>=robo->y && i<=robo->y)
+            if(j>= robo->x && j<= robo->x && i>= robo->y && i<= robo->y)
                 printf("x");
             else
                 printf("_");
@@ -23,11 +28,7 @@ void mapa(Robo *robo){
     }
     //função que faz a movimentação do robô
 }
-void construct(Robo *robo){//constructor
-    robo->x=0;
-    robo->y=0;
-    robo->ptr = mapa;//metodo da classe robô
-}
+
 
 
 

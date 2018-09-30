@@ -20,7 +20,7 @@ int main()
             if(robo->x < 20)
                 robo->x++;
         }
-        system("cls");
+        system("clear");
     }
     return 0;
 }
