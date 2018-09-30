@@ -1,18 +1,11 @@
-typedef struct robo{
+struct robo{
     int hp;
-    int x1;
-    int x2;
-    int y1;
-    int y2;
-
-    /local onde as funções serão referenciadas através do ponteiro.
-
-}Robo;
-// #include vector - shoots
-
-typedef struct tiro{
     int x;
     int y;
-    int dir;
-}Tiro;
+    int (*ptr)(Robo);//ponteiro que recebe o método mapa
+};
+typedef struct robo Robo;
+Robo* cria_robo();
+void mapa(Robo *robo);
+void construct(Robo *robo);
 
