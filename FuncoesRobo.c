@@ -7,28 +7,51 @@ Robo* cria_robo(){
     if(r == NULL)
         exit(1);
 
-    return r;//cria alocando dinamicamente memoria pro robô
-}
-void construct(Robo *robo){//constructor
-    robo->x=0;
-    robo->y=0;
-    robo->ptr = mapa;//metodo da classe robô
+    return r;
 }
 void mapa(Robo *robo){
     int i,j;
 
-    for(i=0;i<10;i++){
-        for(j=0;j<20;j++){
-            if(j>= robo->x && j<= robo->x && i>= robo->y && i<= robo->y)
-                printf("x");
+    for(i=0;i<LINHA;i++){
+        for(j=0;j<COLUNA;j++){
+            if(j>=robo->x && j<=robo->x && i>=robo->y && i<=robo->y)
+                printf("X");
             else
                 printf("_");
         }
         printf("\n");
     }
-    //função que faz a movimentação do robô
 }
+void construct(Robo *robo){
+    robo->x = 0;
+    robo->y = 0;
+    robo->z = LINHA-1;
+    robo->k = LINHA-1;
+    robo->ptr = mapa;
+}
+void tabuleiro(int mat[LINHA][COLUNA]){
+    int i,j;
 
+    for(i=0;i<LINHA;i++){
+        for(j=0;j<COLUNA;j++){
+            mat[i][j] = -1;
+        }
+    }
+}
+void mostraTabuleiro(int mat[LINHA][COLUNA],int x,int y,int z,int k){
+    int i,j;
+
+    for(i=0;i<LINHA;i++){
+        for(j=0;j<COLUNA;j++){
+            if(i == x && j == y || i == z && j ==k){
+                printf("X");
+            }else
+                printf("_");
+
+        }
+        printf("\n");
+    }
+}
 
 
 
