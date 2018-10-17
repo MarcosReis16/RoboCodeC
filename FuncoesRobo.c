@@ -89,9 +89,9 @@ void arena(int tabuleiro[LINHA][COLUNA],Robo *robo,Robo *robo2,int validador){
     }
     if(validador == 0){
         if(robo->linha == robo2->linha)
-            robo->hp -= rand()%2;//PROVAVELMENTE VAI SERVIR PARA POTENCIA DO TIRO DO ADVERSARIO
+            robo2->hp -= rand()%2;//PROVAVELMENTE VAI SERVIR PARA POTENCIA DO TIRO DO ADVERSARIO
         if(robo->coluna == robo2->coluna)
-            robo2->hp -= rand()%2;
+            robo->hp -= rand()%2;
     }
         printf("\n\nHP ROBO (X) = %d\n(Robo X so atira na horizontal)",robo->hp);
         printf("\n\nHP ROBO (@) = %d\n(Robo @ so atira na vertical)",robo2->hp);
