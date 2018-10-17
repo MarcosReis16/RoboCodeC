@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <unistd.h>
+#include <windows.h>
 #include "FuncoesRobo.h"
 
 int main()
@@ -19,37 +21,11 @@ int main()
 
     while(1){
 
-        if(rand()%5 == 0){
-            //PRIMEIRO ROBO
-
-            if(robo->linha > 0)
-                robo->linha -= rand()%2;
-
-            if(robo->coluna > 0)
-                robo->coluna -= rand()%2;
-
-            if(robo->linha < LINHA-1)
-                robo->linha += rand()%2;
-
-            if(robo->coluna < COLUNA-1)
-                robo->coluna += rand()%2;
-
-
-        //SEGUNDO ROBO
-
-            if(robo2->linha < LINHA-1)
-                robo2->linha += rand()%2;
-
-            if(robo2->coluna < COLUNA-1)
-                robo2->coluna += rand()%2;
-
-            if(robo2->linha > 0)//robo->z > 0 -- ANDA EM TODO MAPA // robo->z > LINHA-5 (SO FICA NO CANTO)
-                robo2->linha -= rand()%2;
-
-            if(robo2->coluna > 0)//robo->z > 0 -- ANDA EM TODO MAPA //robo->k > COLUNA-5 (SO FICA NO CANTO)
-                robo2->coluna -= rand()%2;
-
+        if(rand()%10 == 0 || rand()%10 == 1 || rand()%10 == 2 || rand()%10 == 3){
+            robo->ptr2(robo);
+            robo2->ptr2(robo2);
             robo->ptr(mat,robo,robo2);
+
         }
 
         if(robo->hp <= 0 && robo2->hp <= 0){
@@ -63,6 +39,8 @@ int main()
             break;
         }
     }
+
+
 
     return 0;
 }
