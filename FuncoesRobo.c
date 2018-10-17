@@ -4,7 +4,7 @@
 #include <unistd.h>
 #include <windows.h>
 #include <time.h>
-#include "robo.h"
+#include "FuncoesRobo.h"
 
 Robo* cria_robo(){
     Robo *r = (Robo*)malloc(sizeof(Robo));
