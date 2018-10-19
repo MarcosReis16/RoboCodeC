@@ -1,8 +1,8 @@
-#define LINHA 5
-#define COLUNA 15
+#define LINHA 15
+#define COLUNA 50
 
 struct robo{
-    char nome[15];
+    char nome[2];
     int hp;
     int tiro;
     int linha;
@@ -12,16 +12,15 @@ struct robo{
 };
 typedef struct robo Robo;
 Robo* cria_robo();
-void construct(Robo *robo,Robo* robo2);
+void construct(Robo *robo,Robo* robo2,Robo *robo3);
 void preenche_arena(int mat[LINHA][COLUNA]);
-void play_game(int mat[LINHA][COLUNA],Robo *robo,Robo *robo2);
-void atirar(int mat[LINHA][COLUNA], Robo* robo,Robo *robo2);
+void play_game(int mat[LINHA][COLUNA],Robo *robo,Robo *robo2,Robo *robo3);
+void atirar(int mat[LINHA][COLUNA], Robo* robo,Robo *robo2,Robo *robo3);
 void verifica(Robo* robo,Robo *robo2);
-void arena(int tabuleiro[LINHA][COLUNA],Robo *robo,Robo *robo2,int validador);
-void mostrarRobo(int mat[LINHA][COLUNA],Robo *robo,Robo* robo2);
-void apagaRobo(int mat[LINHA][COLUNA],Robo *robo,Robo *robo2);
+void arena(int tabuleiro[LINHA][COLUNA],Robo *robo,Robo *robo2,Robo *robo3,int validador);
+void mostrarRobo(int mat[LINHA][COLUNA],Robo *robo,Robo* robo2,Robo *robo3);
+void apagaRobo(int mat[LINHA][COLUNA],Robo *robo,Robo *robo2,Robo *robo3);
 void tiro(int mat[LINHA][COLUNA],int i,int j,int validador);
 void limpaTiro(int mat[LINHA][COLUNA],int i,int j);
-int tiro_robo2(int mat[LINHA][COLUNA],int i,int j);
 void metodo(Robo *robo);
-void metodo2(Robo *robo);
+
