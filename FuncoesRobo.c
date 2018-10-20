@@ -1,10 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include <string.h>
 #include <unistd.h>
 #include <windows.h>
-#include <time.h>
 #include "FuncoesRobo.h"
+
 
 Robo* cria_robo(){
     Robo *r = (Robo*)malloc(sizeof(Robo));
@@ -13,9 +14,9 @@ Robo* cria_robo(){
 
     return r;
 }
-void metodo(Robo *robo){
+int metodo(int mat[LINHA][COLUNA],Robo *robo){
             //PRIMEIRO ROBO
-
+    if(robo->hp >= 0){
         if(robo->linha > 0)
             robo->linha -= rand()%2;
 
@@ -27,7 +28,10 @@ void metodo(Robo *robo){
 
         if(robo->coluna < COLUNA-1)
             robo->coluna += rand()%2;
-
+        return 1;
+    }
+    mat[robo->linha][robo->coluna] = -1;
+    return 0;
 }
 void arena(int tabuleiro[LINHA][COLUNA],Robo *robo,Robo *robo2,Robo *robo3,int validador){
     int linha,coluna;
@@ -70,31 +74,50 @@ void arena(int tabuleiro[LINHA][COLUNA],Robo *robo,Robo *robo2,Robo *robo3,int v
             printf("-");
     }
     if(validador == 0){
-        if(robo->linha == robo2->linha)
-            robo2->hp-=1;
+        if(robo->linha == robo2->linha){
+            robo2->hp -= robo->tiro;
+            robo->qtd_tiro--;
+        }
         if(robo->linha == robo3->linha){
-            robo3->hp-=1;
-            robo->hp-=1;
+            robo3->hp -= robo->tiro;
+            robo->hp -= robo3->tiro;
+            robo->qtd_tiro--;
+            robo3->qtd_tiro--;
         }
-        if(robo2->coluna == robo->coluna)
-            robo->hp-=1;
+        if(robo2->coluna == robo->coluna){
+            robo->hp -= robo2->tiro;
+            robo2->qtd_tiro--;
+        }
         if(robo2->coluna == robo3->coluna){
-            robo3->hp-=1;
-            robo2->hp-=1;
+            robo3->hp -= robo2->tiro;
+            robo2->hp -= robo3->tiro;
+            robo2->qtd_tiro--;
+            robo3->qtd_tiro--;
         }
-        if(robo3->linha == robo2->linha)
-            robo2->hp-=1;
+        if(robo3->linha == robo2->linha){
+            robo2->hp -= robo3->tiro;
+            robo3->qtd_tiro--;
+        }
     }
 
-        printf("\n\nHP ROBO (%s) = %d\n(Robo %s so atira na horizontal)",robo->nome,robo->hp,robo->nome);
-        printf("\n\nHP ROBO (%s) = %d\n(Robo %s so atira na vertical)",robo2->nome,robo2->hp,robo2->nome);
-        printf("\n\nHP ROBO (%s) = %d\n(Robo %s atira na horizontal e vertical)",robo3->nome,robo3->hp,robo3->nome);
+        printf("\n\nHP ROBO (%s) = %d - Qtd de Tiros: %d\n(Robo %s so atira na horizontal)",robo->nome,robo->hp,robo->qtd_tiro,robo->nome);
+        printf("\n\nHP ROBO (%s) = %d - Qtd de Tiros: %d\n(Robo %s so atira na vertical)",robo2->nome,robo2->hp,robo2->qtd_tiro,robo2->nome);
+        printf("\n\nHP ROBO (%s) = %d - Qtd de Tiros: %d\n(Robo %s atira na horizontal e vertical)",robo3->nome,robo3->hp,robo3->qtd_tiro,robo3->nome);
 
 }
 void mostrarRobo(int mat[LINHA][COLUNA],Robo *robo,Robo* robo2,Robo *robo3){
-    mat[robo->linha][robo->coluna] = 0;
-    mat[robo2->linha][robo2->coluna] = 1;
-    mat[robo3->linha][robo3->coluna] = 4;
+    if(robo->hp > 0)
+        mat[robo->linha][robo->coluna] = 0;
+    else
+        mat[robo->linha][robo->coluna] = -1;
+    if(robo2->hp > 0)
+        mat[robo2->linha][robo2->coluna] = 1;
+    else
+        mat[robo2->linha][robo2->coluna] = -1;
+    if(robo3->hp > 0)
+        mat[robo3->linha][robo3->coluna] = 4;
+    else
+        mat[robo3->linha][robo3->coluna] = -1;
 }
 void apagaRobo(int mat[LINHA][COLUNA],Robo *robo,Robo* robo2,Robo *robo3){
     mat[robo->linha][robo->coluna] = -1;
@@ -119,24 +142,28 @@ void play_game(int mat[LINHA][COLUNA],Robo *robo,Robo *robo2,Robo *robo3){
     arena(mat,robo,robo2,robo3,0);
     apagaRobo(mat,robo,robo2,robo3);
     atirar(mat,robo,robo2,robo3);
-    //Sleep(370);
+    Sleep(370);
 }
 void construct(Robo *robo, Robo* robo2,Robo *robo3){
     strcpy(robo->nome,"X");
     strcpy(robo2->nome,"@");
     strcpy(robo3->nome,"$");
+    robo->tiro = 1+rand()%5;
+    robo2->tiro = 1+rand()%5;
+    robo3->tiro = 1+rand()%5;
+    robo->qtd_tiro = 50+rand()%100;
+    robo2->qtd_tiro = 50+rand()%100;
+    robo3->qtd_tiro = 50+rand()%100;
     robo->hp = robo2->hp = robo3->hp = 100;
-
     robo->linha = LINHA/3;
     robo->coluna = 0;
     robo2->linha = LINHA-1;
     robo2->coluna = COLUNA/2;
     robo3->linha = 0;
     robo3->coluna = COLUNA-1;
-
-    //robo->ptr = play_game;
     robo->ptr2 = metodo;
     robo2->ptr2 = metodo;
+    robo3->ptr2 = metodo;
 
 }
 void preenche_arena(int mat[LINHA][COLUNA]){
@@ -150,6 +177,7 @@ void preenche_arena(int mat[LINHA][COLUNA]){
 }
 void atirar(int mat[LINHA][COLUNA],Robo *robo,Robo *robo2,Robo *robo3){
     //robo 1 atirando no 2
+
     if(robo->linha == robo2->linha){
         if(robo->coluna < robo2->coluna){
             int aux = robo->coluna;
@@ -182,9 +210,13 @@ void atirar(int mat[LINHA][COLUNA],Robo *robo,Robo *robo2,Robo *robo3){
         }
 
     }
+
+
+
     //robo 1 atirando no 3
     if(robo->linha == robo3->linha){
         if(robo->coluna < robo3->coluna){
+
             int aux = robo->coluna;
             int validador = 0;
             while(aux < robo3->coluna-1){
@@ -195,10 +227,26 @@ void atirar(int mat[LINHA][COLUNA],Robo *robo,Robo *robo2,Robo *robo3){
                 limpaTiro(mat,robo->linha,aux+1);
                 aux++;
                 validador++;
-
             }
             apagaRobo(mat,robo,robo2,robo3);
+
+        if(robo3->hp > 0){
+            int aux = robo3->coluna;
+            int validador = 0;
+            while(aux > robo->coluna+1){
+                mostrarRobo(mat,robo,robo2,robo3);
+                tiro(mat,robo3->linha,aux-1,-1);
+                system("cls");
+                arena(mat,robo,robo2,robo3,validador);
+                limpaTiro(mat,robo3->linha,aux-1);
+                aux--;
+                validador++;
+            }
+            apagaRobo(mat,robo,robo2,robo3);
+        }
+
         }else{//robo 1 atirando no 3
+
             int aux = robo->coluna;
             int validador = 0;
             while(aux > robo3->coluna+1){
@@ -209,16 +257,31 @@ void atirar(int mat[LINHA][COLUNA],Robo *robo,Robo *robo2,Robo *robo3){
                 limpaTiro(mat,robo->linha,aux-1);
                 aux--;
                 validador++;
-
             }
                 apagaRobo(mat,robo,robo2,robo3);
+
+
+        if(robo3->hp > 0){
+            int aux = robo3->coluna;
+            int validador = 0;
+            while(aux < robo->coluna-1){
+                mostrarRobo(mat,robo,robo2,robo3);
+                tiro(mat,robo3->linha,aux+1,-1);
+                system("cls");
+                arena(mat,robo,robo2,robo3,validador);
+                limpaTiro(mat,robo3->linha,aux+1);
+                aux++;
+                validador++;
+            }
+            apagaRobo(mat,robo,robo2,robo3);
+           }
+
         }
 
     }
 
-//*******************************************************************************************************************
-
             //robo 2 atirando no 1
+
     if(robo2->coluna == robo->coluna){
         if(robo2->linha < robo->linha){
             int aux = robo2->linha;
@@ -248,7 +311,10 @@ void atirar(int mat[LINHA][COLUNA],Robo *robo,Robo *robo2,Robo *robo3){
             apagaRobo(mat,robo,robo2,robo3);
         }
     }
+
     //robo 2 atirando no 3
+
+
     if(robo2->coluna == robo3->coluna){
         if(robo2->linha < robo3->linha){
             int aux = robo2->linha;
@@ -278,43 +344,10 @@ void atirar(int mat[LINHA][COLUNA],Robo *robo,Robo *robo2,Robo *robo3){
             apagaRobo(mat,robo,robo2,robo3);
         }
     }
-//***************************************************************************************************************
 
 
-    //robo 3 atirando no 1 (linha)
-
-    if(robo3->linha == robo->linha){
-        if(robo3->coluna < robo->coluna){
-            int aux = robo3->coluna;
-            int validador = 0;
-            while(aux < robo->coluna-1){
-                mostrarRobo(mat,robo,robo2,robo3);
-                tiro(mat,robo3->linha,aux+1,-1);
-                system("cls");
-                arena(mat,robo,robo2,robo3,validador);
-                limpaTiro(mat,robo3->linha,aux+1);
-                aux++;
-                validador++;
-
-            }
-            apagaRobo(mat,robo,robo2,robo3);
-        }else{//robo 3 atirando no 1 (linha)
-            int aux = robo3->coluna;
-            int validador = 0;
-            while(aux > robo->coluna+1){
-                mostrarRobo(mat,robo,robo2,robo3);
-                tiro(mat,robo3->linha,aux-1,-1);
-                system("cls");
-                arena(mat,robo,robo2,robo3,validador);
-                limpaTiro(mat,robo3->linha,aux-1);
-                aux--;
-                validador++;
-
-            }
-            apagaRobo(mat,robo,robo2,robo3);
-        }
-    }
     //robo 3 atirando no 2 (linha)
+
     if(robo3->linha == robo2->linha){
         if(robo3->coluna < robo2->coluna){
             int aux = robo3->coluna;
@@ -346,7 +379,9 @@ void atirar(int mat[LINHA][COLUNA],Robo *robo,Robo *robo2,Robo *robo3){
             apagaRobo(mat,robo,robo2,robo3);
         }
     }
+
     //robo 3 atirando no 1 (coluna)
+
     if(robo3->coluna == robo->coluna){
         if(robo3->linha < robo->linha){
             int aux = robo3->linha;
@@ -378,6 +413,7 @@ void atirar(int mat[LINHA][COLUNA],Robo *robo,Robo *robo2,Robo *robo3){
     }
 
     //robo 3 atirando no 2 (coluna)
+
     if(robo3->coluna == robo2->coluna){
         if(robo3->linha < robo2->linha){
             int aux = robo3->linha;
@@ -407,9 +443,10 @@ void atirar(int mat[LINHA][COLUNA],Robo *robo,Robo *robo2,Robo *robo3){
             apagaRobo(mat,robo,robo2,robo3);
         }
     }
+
 }
-void verifica(Robo* robo,Robo* robo2){
-    if((robo->linha - robo2->linha) == 1 || (robo->linha - robo2->linha) == -1  && (robo->coluna - robo2->coluna) == 1 || (robo->coluna - robo2->coluna) == -1){
+void verifica(Robo* robo,Robo* robo2, Robo* robo3){
+    if((robo->linha - robo2->linha) == 1 || (robo->linha - robo2->linha) == -1  && (robo->coluna - robo2->coluna) == 1 || (robo->coluna - robo2->coluna) == -1 && (robo->linha - robo3->linha) == 1 || (robo->linha - robo3->linha) == -1  && (robo->coluna - robo3->coluna) == 1 || (robo->coluna - robo3->coluna) == -1 && (robo2->linha - robo3->linha) == 1 || (robo2->linha - robo3->linha) == -1  && (robo2->coluna - robo3->coluna) == 1 || (robo2->coluna - robo3->coluna) == -1){
         if(robo->linha == 0)
             robo->linha++;
         else if(robo->linha == LINHA-1)
@@ -426,10 +463,14 @@ void verifica(Robo* robo,Robo* robo2){
             robo2->coluna++;
         else if(robo2->coluna == COLUNA-1)
             robo2->coluna--;
+        else if(robo3->linha == 0)
+            robo3->linha++;
+        else if(robo3->linha == LINHA-1)
+            robo3->linha--;
+        else if(robo3->coluna == 0)
+            robo3->coluna++;
+        else if(robo3->coluna == COLUNA-1)
+            robo3->coluna--;
 
     }
 }
-
-
-
-

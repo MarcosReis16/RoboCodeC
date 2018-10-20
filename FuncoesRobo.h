@@ -5,10 +5,12 @@ struct robo{
     char nome[2];
     int hp;
     int tiro;
+    int qtd_tiro;
     int linha;
     int coluna;
+    int vitorias;
     void (*ptr)(int mat[LINHA][COLUNA], struct robo *r,struct robo *r2);
-    void (*ptr2)(struct robo *r3);
+    int (*ptr2)(int mat[LINHA][COLUNA],struct robo *r3);
 };
 typedef struct robo Robo;
 Robo* cria_robo();
@@ -22,5 +24,8 @@ void mostrarRobo(int mat[LINHA][COLUNA],Robo *robo,Robo* robo2,Robo *robo3);
 void apagaRobo(int mat[LINHA][COLUNA],Robo *robo,Robo *robo2,Robo *robo3);
 void tiro(int mat[LINHA][COLUNA],int i,int j,int validador);
 void limpaTiro(int mat[LINHA][COLUNA],int i,int j);
-void metodo(Robo *robo);
+int metodo(int mat[LINHA][COLUNA],Robo *robo);
+
+
+
 
