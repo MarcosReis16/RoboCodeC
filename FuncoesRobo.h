@@ -16,7 +16,7 @@ void construct(Robo *robo,Robo* robo2,Robo *robo3);
 void preenche_arena(int mat[LINHA][COLUNA]);
 void play_game(int mat[LINHA][COLUNA],Robo *robo,Robo *robo2,Robo *robo3);
 void atirar(int mat[LINHA][COLUNA], Robo* robo,Robo *robo2,Robo *robo3);
-void verifica(Robo* robo,Robo *robo2);
+void verifica(Robo* robo,Robo *robo2,Robo *robo3);
 void arena(int tabuleiro[LINHA][COLUNA],Robo *robo,Robo *robo2,Robo *robo3,int validador);
 void mostrarRobo(int mat[LINHA][COLUNA],Robo *robo,Robo* robo2,Robo *robo3);
 void apagaRobo(int mat[LINHA][COLUNA],Robo *robo,Robo *robo2,Robo *robo3);
